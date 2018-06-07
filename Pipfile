@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-sqlalchemy = "*"
+alembic = "*"
+"psycopg2-binary" = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+
+[dev-packages]
+ipython = "*"
+pylint = "*"
+pytest = "*"
+pytest-flask = "*"
+ipdb = "*"
+factory-boy = "*"
+
+[requires]
+python_version = "3.6"
