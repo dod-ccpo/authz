@@ -10,6 +10,7 @@ alembic = "*"
 "psycopg2-binary" = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
+uuid = "*"
 
 [dev-packages]
 ipython = "*"
