@@ -5,4 +5,4 @@ config = make_config()
 app = make_app(config)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=config['PORT'])
