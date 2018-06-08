@@ -1,7 +1,5 @@
 from flask import Blueprint, jsonify, abort
 
-from authz.models import TaskOrder
-
 
 api = Blueprint('api', __name__)
 

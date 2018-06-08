@@ -1,7 +1,5 @@
 
-# ATST
-
-[![Build Status](https://travis-ci.org/dod-ccpo/atst.svg?branch=master)](https://travis-ci.org/dod-ccpo/atst)
+# Authz
 
 ## Installation
 
@@ -36,9 +34,3 @@ To run the unit tests and watch for changes to python files:
 ## Direnv
 
 If you're using direnv, refer to ![this page](https://github.com/direnv/direnv/wiki/Python#-pipenv).
-
-## Environment Variables
-
-`ENVIRONMENT`: Maps to `FLASK_ENV`. Can be either `development` or `production`.
-`DEBUG`: Enable debug mode.
-`DATABASE_URI`: The full database connection string.

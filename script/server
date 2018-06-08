@@ -7,4 +7,4 @@ set -e
 cd "$(dirname "${0}")/.."
 
 # Launch the app
-pipenv run python main.py ${@}
+pipenv run python app.py ${@}
