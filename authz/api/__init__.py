@@ -12,6 +12,12 @@ def get_roles():
     return RoleSerializer().jsonify(roles, many=True)
 
 
+@api.route('/workspaces/<uuid:workspace_id>/users', methods=['PUT'])
+def update_workspace_users(workspace_id):
+    request_json = request.get_json()
+    return jsonify(request_json)
+
+
 @api.route('/workspaces/<uuid:workspace_id>/users')
 def get_workspace_users(workspace_id):
     workspace_id = str(workspace_id)

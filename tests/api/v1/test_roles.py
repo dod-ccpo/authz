@@ -1,4 +1,5 @@
 from uuid import uuid4
+from json import dumps
 
 
 def test_get_roles(client):
@@ -12,3 +13,24 @@ def test_get_workspace_user_roles(client):
     workspace_id = uuid4()
     response = client.get('/workspaces/{}/users'.format(workspace_id))
     assert response.status_code == 200
+
+
+def test_update_workspace_user_roles(client):
+    workspace_id = uuid4()
+    owner_id = str(uuid4())
+    admin_id = str(uuid4())
+
+    new_workspace_users = {
+        owner_id: {
+            'roles': ['owner']
+        },
+        admin_id: {
+            'roles': ['admin']
+        }
+    }
+
+    response = client.put(
+        '/workspaces/{}/users'.format(workspace_id),
+        content_type='application/json',
+        data=dumps(new_workspace_users))
+    assert('owner' in response.json[owner_id]['roles'])
