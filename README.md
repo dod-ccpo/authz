@@ -1,6 +1,8 @@
 
 # Authz
 
+[![Build Status](https://travis-ci.org/dod-ccpo/authz.svg?branch=master)](https://travis-ci.org/dod-ccpo/authz)
+
 ## Installation
 
     script/setup
