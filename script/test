@@ -9,6 +9,6 @@ cd "$(dirname "${0}")/.."
 if [ "$1" = "watch" ]; then
   ag -l -G [py]$ | entr pipenv run python -m pytest
 else
-  pylint .
+  pipenv run pylint .
   pipenv run python -m pytest -s
 fi
