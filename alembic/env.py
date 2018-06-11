@@ -25,6 +25,7 @@ app_config = make_config()
 config.set_main_option('sqlalchemy.url', app_config['SQLALCHEMY_DATABASE_URI'])
 
 from authz.database import db
+from authz.models import *
 target_metadata = db.metadata
 
 # other values from the config, defined by the needs of env.py,
