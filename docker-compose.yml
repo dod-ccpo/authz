@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:10
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=authz
+    ports:
+      - "5432:5432"
+  backend:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URI=postgres://postgres:postgres@db/authz
+      - DEBUG=True
+    links:
+      - "db:db"
+    ports:
+      - "8081:80"
