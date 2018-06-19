@@ -7,7 +7,8 @@ set -e
 cd "$(dirname "${0}")/.."
 
 # Install pipenv
-if [ -n "${CI+set}" ]; then
+if [ -n "$CI" ]; then
+  echo 'yes'
   pip install pipenv
 else
   pip install -q pipenv --user
