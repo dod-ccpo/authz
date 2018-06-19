@@ -5,8 +5,7 @@ before_install:
   - pip install pipenv
   - pipenv install --dev --skip-lock
 before_script:
-  - psql -c 'create database authz_ci;' -U postgres
-  - pipenv run alembic upgrade head
+  - script/cibuild
 script:
   - python -m pytest
 services:
