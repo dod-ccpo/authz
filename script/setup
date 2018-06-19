@@ -7,7 +7,12 @@ set -e
 cd "$(dirname "${0}")/.."
 
 # Install pipenv
-pip install -q pipenv --user
+if [ -n "${CI+set}" ]; then
+  echo 'ci yo'
+  pip install pipenv
+else
+  pip install -q pipenv --user
+fi
 
 # Install application dependencies
 script/bootstrap
