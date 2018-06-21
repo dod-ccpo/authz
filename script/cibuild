@@ -6,6 +6,6 @@ set -e
 # Ensure we are in the app root directory (not the /script directory)
 cd "$(dirname "${0}")/.."
 
-psql -c 'create database authz_ci;' -U postgres
+psql -c 'create database authz;' -U postgres
 pipenv run alembic upgrade head
 
