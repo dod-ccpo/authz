@@ -5,7 +5,7 @@ from configparser import ConfigParser
 from authz.config import map_config
 from authz.database import db
 from authz.serializers import marshmallow
-from authz.seed_db import seed_db
+
 
 def make_app(config):
     app = Flask(__name__)
@@ -13,8 +13,6 @@ def make_app(config):
 
     db.init_app(app)
     marshmallow.init_app(app)
-
-    seed_db(app, db)
 
     # Imported at the end to avoid circular imports.
     from authz.api import api

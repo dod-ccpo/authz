@@ -25,7 +25,7 @@ def upgrade():
     sa.Column('permissions', postgresql.ARRAY(sa.String()), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_roles_name'), 'roles', ['name'], unique=False)
+    op.create_index(op.f('ix_roles_name'), 'roles', ['name'], unique=True)
     op.create_table('users',
     sa.Column('id', postgresql.UUID(), server_default=sa.text('uuid_generate_v4()'), nullable=False),
     sa.Column('username', sa.String(), nullable=True),
