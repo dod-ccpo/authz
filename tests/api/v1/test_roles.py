@@ -9,6 +9,19 @@ def test_get_roles(client):
     assert(set(['admin', 'owner', 'developer']).issubset(role_names))
 
 
+def test_get_existing_role(client):
+    response = client.get('/roles/developer')
+    assert response.status_code == 200
+    assert response.json['name'] == 'developer'
+    assert 'permissions' in response.json
+
+
+def test_get_nonexistent_role(client):
+    response = client.get('/roles/puppy')
+    assert response.status_code == 404
+
+
+
 def test_get_workspace_user_roles(client):
     workspace_id = uuid4()
     response = client.get('/workspaces/{}/users'.format(workspace_id))

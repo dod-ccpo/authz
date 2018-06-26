@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, abort, request
+from sqlalchemy.orm.exc import NoResultFound
 
 from authz.models import Role, User, WorkspaceRole
 from authz.serializers.role import RoleSerializer
@@ -10,6 +11,15 @@ api = Blueprint('api', __name__)
 def get_roles():
     roles = Role.query.all()
     return RoleSerializer().jsonify(roles, many=True)
+
+
+@api.route('/roles/<string:name>')
+def get_role(name):
+    try:
+        role = Role.query.filter_by(name=name).one()
+    except NoResultFound:
+        return abort(404)
+    return RoleSerializer().jsonify(role)
 
 
 @api.route('/workspaces/<uuid:workspace_id>/users', methods=['PUT'])
