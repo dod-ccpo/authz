@@ -43,12 +43,7 @@ def create_user():
         db.session.add(user)
         db.session.commit()
     except IntegrityError:
-        abort(
-            Response(
-                {"error": "User {} already exists.".format(user.id)}, 409
-            )
-        )
-
+        abort(Response({"error": "User {} already exists.".format(user.id)}, 409))
 
     return UserSerializer().jsonify(user), 201
 
@@ -60,11 +55,7 @@ def update_user(user_id):
     try:
         user = User.query.filter_by(id=user_id).one()
     except NoResultFound:
-        abort(
-            Response(
-                {"error": "User {} not found.".format(user_id)}, 404
-            )
-        )
+        abort(Response({"error": "User {} not found.".format(user_id)}, 404))
 
     try:
         atat_role = Role.query.filter_by(name=user_dict["atat_role"]).one()
