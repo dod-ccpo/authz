@@ -1,0 +1,28 @@
+{
+    'user': {
+        'id': '',
+        'permissions': [
+            'view_workspace'
+            'can_see_every_request'
+        ]
+    }
+}
+
+User has one atat role, multiple workspace roles.
+
+Workspace permissions are a union of atat role perms and workspace role perms.
+
+GET /users/<user_id>/workspaces/<workspace_id>
+{
+  id: "",
+  permissions: [
+    ""
+  ]
+}
+
+has_permission = yield permissions.has(user, workspace, permission)
+
+
+GET /requests?permissions=[]
+
+{ if permissions.workspace.can_delete }

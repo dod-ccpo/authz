@@ -1,19 +1,21 @@
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, jsonify, abort, request, Response
 from sqlalchemy.orm.exc import NoResultFound
 
 from authz.models import Role, User, WorkspaceRole
 from authz.serializers.role import RoleSerializer
+from authz.serializers.user import UserSerializer
+from authz.database import db
 
-api = Blueprint('api', __name__)
+api = Blueprint("api", __name__)
 
 
-@api.route('/roles')
+@api.route("/roles")
 def get_roles():
     roles = Role.query.all()
     return RoleSerializer().jsonify(roles, many=True)
 
 
-@api.route('/roles/<string:name>')
+@api.route("/roles/<string:name>")
 def get_role(name):
     try:
         role = Role.query.filter_by(name=name).one()
@@ -22,56 +24,66 @@ def get_role(name):
     return RoleSerializer().jsonify(role)
 
 
-@api.route('/workspaces/<uuid:workspace_id>/users', methods=['PUT'])
+@api.route("/workspaces/<uuid:workspace_id>/users", methods=["PUT"])
 def update_workspace_users(workspace_id):
-    request_json = request.get_json()
-    return jsonify(request_json)
+    """
+    {
+        'users': [
+            {'id': '', 'workspace_role': 'developer'}
+        ]
+    }
+    """
+
+    workspace_users_to_update = request.json["users"]
+    for user_dict in workspace_users_to_update:
+        try:
+            user = User.query.filter_by(id=user_dict["id"]).one()
+        except NoResultFound:
+            default_role = Role.query.filter_by(name='developer').one_or_none()
+            user = User(id=user_dict["id"], atat_role=default_role)
+
+        try:
+            role = Role.query.filter_by(name=user_dict["workspace_role"]).one()
+        except NoResultFound:
+            abort(
+                Response(
+                    {"error": "Role {} not found.".format(user_dict["workspace_role"])},
+                    404,
+                )
+            )
+
+        user.workspace_roles.append(
+            WorkspaceRole(user=user, role_id=role.id, workspace_id=workspace_id)
+        )
+
+        db.session.add(user)
+
+    db.session.commit()
+
+    workspace_users = User.query.join(WorkspaceRole).filter(
+        WorkspaceRole.workspace_id == workspace_id
+    )
+    return UserSerializer().jsonify(workspace_users, many=True)
 
 
-@api.route('/workspaces/<uuid:workspace_id>/users')
-def get_workspace_users(workspace_id):
-    workspace_id = str(workspace_id)
-    return jsonify({
-        'users': {
-            '04d27fc6-f019-4ac2-9677-5089b424f32a': { # user_id
-                'roles': ['owner'],
-                'atat_permissions': [
-                    'request_jedi_workspace'
-                ],
-                'workspace_permissions': {
-                    workspace_id: [
-                        'view_usage_report',
-                        'view_usage_dollars',
-                        'spin_up_resources',
-                        'pause_resources',
-                        'delete_resources',
-                        'modify_resources'
-                    ]
-                }
-            },
-            'c2249d0b-0ef7-42a5-a4bc-c0301603405b': {
-                'roles': ['ccpo'],
-                'atat_permissions': [
-                    'review_jedi_workspace_request',
-                    'modify_atat_role_permissions',
-                    'create_csp_role',
-                    'delete_csp_role',
-                    'modify_csp_role_permissions'
-                ],
-                'workspace_permissions': {
-                    workspace_id: [
-                    ]
-                }
-            },
-            'b2879be8-8497-4757-95d4-05f596f65637': {
-                'roles': ['developer'],
-                'atat_permissions': [],
-                'workspace_permissions': {
-                    workspace_id: [
-                        'view_usage_report',
-                        'view_application',
-                        'view_application_environment'
-                    ]
-                },
-            },
-    }})
+@api.route("/workspaces/<uuid:workspace_id>/users/<uuid:user_id>", methods=["GET"])
+def get_workspace_user(workspace_id, user_id):
+    try:
+        user = User.query.filter_by(id=user_id).one()
+    except NoResultFound:
+        abort(Response({"error": "User {} not found.".format(user_id)}, 404))
+
+    atat_permissions = set(user.atat_role.permissions)
+    try:
+        workspace_role = (
+            WorkspaceRole.query.join(User)
+            .filter(User.id == user_id, WorkspaceRole.workspace_id == workspace_id)
+            .one()
+        )
+        workspace_permissions = workspace_role.role.permissions
+    except NoResultFound:
+        workspace_permissions = []
+
+    user.permissions = set(workspace_permissions).union(atat_permissions)
+    return UserSerializer().jsonify(user)
+

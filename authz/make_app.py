@@ -22,14 +22,11 @@ def make_app(config):
 
 
 def make_config():
-    BASE_CONFIG_FILENAME = os.path.join(
-        os.path.dirname(__file__),
-        '../config/base.ini',
-    )
+    BASE_CONFIG_FILENAME = os.path.join(os.path.dirname(__file__), "../config/base.ini")
     ENV_CONFIG_FILENAME = os.path.join(
         os.path.dirname(__file__),
-        '../config/',
-        '{}.ini'.format(os.getenv('FLASK_ENV', 'dev').lower())
+        "../config/",
+        "{}.ini".format(os.getenv("FLASK_ENV", "dev").lower()),
     )
     config = ConfigParser()
 
