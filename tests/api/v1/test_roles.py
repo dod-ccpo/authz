@@ -21,10 +21,16 @@ def test_get_nonexistent_role(client):
     assert response.status_code == 404
 
 
-def test_get_workspace_user_roles(client):
-    workspace_id = uuid4()
-    response = client.get('/api/v1/workspaces/{}/users'.format(workspace_id))
+def test_create_user(client):
+    user_id = str(uuid4())
+    response = client.post(
+        "/api/v1/users",
+        content_type="application/json",
+        data=dumps({"id": user_id, "atat_role": "ccpo"}),
+    )
     assert response.status_code == 200
+    assert response.json["id"] == user_id
+    assert response.json["atat_role"] == "ccpo"
 
 
 def test_update_workspace_user_roles(client):
@@ -41,5 +47,5 @@ def test_update_workspace_user_roles(client):
         '/api/v1/workspaces/{}/users'.format(workspace_id),
         content_type='application/json',
         data=dumps({"users": new_workspace_users}))
-    print(response.json)
-    assert('owner' in response.json[1]['roles'])
+    assert response.status_code == 200
+    assert response.json[0]['atat_role'] == 'developer'

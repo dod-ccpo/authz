@@ -20,8 +20,28 @@ def get_role(name):
     try:
         role = Role.query.filter_by(name=name).one()
     except NoResultFound:
-        return abort(404)
+        abort(404)
     return RoleSerializer().jsonify(role)
+
+
+@api.route("/users", methods=["POST"])
+def create_user():
+    user_dict = request.json
+
+    try:
+        atat_role = Role.query.filter_by(name=user_dict["atat_role"]).one()
+    except NoResultFound:
+        abort(
+            Response(
+                {"error": "Role {} not found.".format(user_dict["atat_role"])}, 404
+            )
+        )
+
+    user = User(id=user_dict["id"], atat_role=atat_role)
+    db.session.add(user)
+    db.session.commit()
+
+    return UserSerializer().jsonify(user)
 
 
 @api.route("/workspaces/<uuid:workspace_id>/users", methods=["PUT"])
@@ -39,7 +59,7 @@ def update_workspace_users(workspace_id):
         try:
             user = User.query.filter_by(id=user_dict["id"]).one()
         except NoResultFound:
-            default_role = Role.query.filter_by(name='developer').one_or_none()
+            default_role = Role.query.filter_by(name="developer").one_or_none()
             user = User(id=user_dict["id"], atat_role=default_role)
 
         try:
@@ -86,4 +106,3 @@ def get_workspace_user(workspace_id, user_id):
 
     user.permissions = set(workspace_permissions).union(atat_permissions)
     return UserSerializer().jsonify(user)
-
