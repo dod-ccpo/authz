@@ -92,10 +92,10 @@ def test_ccpo_has_workspace_permissions_by_default(client):
     client.post(
         "/api/v1/users",
         content_type="application/json",
-        data=dumps({'id': user_id, 'atat_role': 'ccpo'})
+        data=dumps({"id": user_id, "atat_role": "ccpo"}),
     )
     response = client.get(
         "/api/v1/workspaces/{}/users/{}".format(workspace_id, user_id),
         content_type="application/json",
     )
-    assert 'view_usage_report' in response.json['permissions']
+    assert "view_usage_report" in response.json["permissions"]
