@@ -28,10 +28,24 @@ def test_create_user(client):
         content_type="application/json",
         data=dumps({"id": user_id, "atat_role": "ccpo"}),
     )
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json["id"] == user_id
     assert response.json["atat_role"] == "ccpo"
 
+
+def test_create_existing_user(client):
+    user_id = str(uuid4())
+    client.post(
+        "/users",
+        content_type="application/json",
+        data=dumps({"id": user_id, "atat_role": "ccpo"}),
+    )
+    response = client.post(
+        "/users",
+        content_type="application/json",
+        data=dumps({"id": user_id, "atat_role": "ccpo"}),
+    )
+    assert response.status_code == 409
 
 def test_update_user(client):
     user_id = str(uuid4())

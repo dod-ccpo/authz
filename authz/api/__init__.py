@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, abort, request, Response
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError
 
 from authz.models import Role, User, WorkspaceRole
 from authz.serializers.role import RoleSerializer
@@ -37,11 +38,19 @@ def create_user():
             )
         )
 
-    user = User(id=user_dict["id"], atat_role=atat_role)
-    db.session.add(user)
-    db.session.commit()
+    try:
+        user = User(id=user_dict["id"], atat_role=atat_role)
+        db.session.add(user)
+        db.session.commit()
+    except IntegrityError:
+        abort(
+            Response(
+                {"error": "User {} already exists.".format(user.id)}, 409
+            )
+        )
 
-    return UserSerializer().jsonify(user)
+
+    return UserSerializer().jsonify(user), 201
 
 
 @api.route("/users/<uuid:user_id>", methods=["PUT"])
