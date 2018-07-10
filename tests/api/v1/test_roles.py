@@ -3,28 +3,28 @@ from json import dumps
 
 
 def test_get_roles(client):
-    response = client.get('/roles')
+    response = client.get('/api/v1/roles')
     assert response.status_code == 200
     role_names = [role['name'] for role in response.json]
     assert(set(['admin', 'owner', 'developer']).issubset(role_names))
 
 
 def test_get_existing_role(client):
-    response = client.get('/roles/developer')
+    response = client.get('/api/v1/roles/developer')
     assert response.status_code == 200
     assert response.json['name'] == 'developer'
     assert 'permissions' in response.json
 
 
 def test_get_nonexistent_role(client):
-    response = client.get('/roles/puppy')
+    response = client.get('/api/v1/roles/puppy')
     assert response.status_code == 404
 
 
 
 def test_get_workspace_user_roles(client):
     workspace_id = uuid4()
-    response = client.get('/workspaces/{}/users'.format(workspace_id))
+    response = client.get('/api/v1/workspaces/{}/users'.format(workspace_id))
     assert response.status_code == 200
 
 
@@ -43,7 +43,7 @@ def test_update_workspace_user_roles(client):
     }
 
     response = client.put(
-        '/workspaces/{}/users'.format(workspace_id),
+        '/api/v1/workspaces/{}/users'.format(workspace_id),
         content_type='application/json',
         data=dumps(new_workspace_users))
     assert('owner' in response.json[owner_id]['roles'])
