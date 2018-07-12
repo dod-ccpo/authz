@@ -53,10 +53,15 @@ def create_user():
 
     Returns the created user.
     """
-    new_user_dict = request.json
+    try:
+        new_user_dict = request.json
+        user_id = new_user_dict["id"]
+        user_atat_role = new_user_dict["atat_role"]
+    except (KeyError, TypeError):
+        abort(400)
 
     try:
-        new_user = Users.create(new_user_dict["id"], new_user_dict["atat_role"])
+        new_user = Users.create(user_id, user_atat_role)
     except AlreadyExistsError:
         return (jsonify({"error": "User already exists."}), 409)
 
@@ -75,7 +80,10 @@ def update_user(user_id):
 
     Returns the updated user.
     """
-    atat_role_name = request.json["atat_role"]
+    try:
+        atat_role_name = request.json["atat_role"]
+    except (KeyError, TypeError):
+        abort(400)
 
     try:
         updated_user = Users.update(user_id, atat_role_name)
@@ -100,7 +108,10 @@ def update_workspace_users(workspace_id):
     Returns a list of users who have roles in the given workspace.
     """
 
-    workspace_users_to_update = request.json["users"]
+    try:
+        workspace_users_to_update = request.json["users"]
+    except (KeyError, TypeError):
+        abort(400)
 
     try:
         workspace_users = WorkspaceUsers.add_many(
