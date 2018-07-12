@@ -12,7 +12,7 @@ GET /api/v1/roles
 ```
 
 #### Response
-```
+```json
 [
   {
     "description": "",
@@ -58,7 +58,8 @@ GET /api/v1/role/developer
 ```
 
 #### Response
-```
+
+```json
 {
     "description": "",
     "id": "a380fdcd-ca5f-407f-9b9b-d54d2ef6a5be",
@@ -70,5 +71,96 @@ GET /api/v1/role/developer
         "view_application_in_workspace",
         "view_environment_in_application"
     ]
+}
+```
+
+## Users
+
+### Create a new user
+
+Creates a new atat user with the given role.
+
+#### Request
+
+```
+POST /users/
+{
+    id: <user id>,
+    atat_role: <name of an atat role>
+}
+```
+
+#### Response
+
+```
+{
+    "atat_role": "developer",
+    "id": "4069cdec-6750-44d4-97d7-126658019040",
+    "username": null,
+    "workspace_roles": []
+}
+```
+
+### Update a user
+
+Update a given user with a new atat role.
+
+#### Request
+
+```json
+PUT /users/<user id>
+{
+    atat_role: <name of an atat role>
+}
+```
+
+#### Response
+
+```json
+{
+    "atat_role": "developer",
+    "id": "4069cdec-6750-44d4-97d7-126658019040",
+    "username": null,
+    "workspace_roles": []
+}
+```
+
+## Workspaces
+
+### Get workspace users
+
+#### Request
+
+```
+GET /workspaces/<workspace id>/users/<user id>
+```
+
+### Update workspace users
+
+#### Request
+
+```json
+PUT /workspaces/<workspace id>/users
+{
+    "users": [
+        {"id": "", "workspace_role": "developer"}
+    ]
+}
+```
+
+#### Response
+
+```json
+{
+  "atat_role":"developer",
+  "id":"42627d7d-f58f-4217-baa6-1c5346186e26",
+  "permissions": [
+    "view_application_in_workspace",
+    "view_environment_in_application",
+    "view_usage_report",
+    "view_usage_dollars"
+  ],
+  "username": None,
+  "workspace_roles": ["577eeddd-2bc2-4b74-8163-79f5d91d02ba"]
 }
 ```
