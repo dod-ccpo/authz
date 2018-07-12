@@ -3,7 +3,7 @@ import pytest
 from authz.make_app import make_app, make_config
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def app():
     app = make_app(make_config())
 

@@ -1,4 +1,5 @@
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.dialects.postgresql import insert
 
 from authz.database import db
 from authz.models import User, WorkspaceRole, Role
@@ -56,11 +57,19 @@ class WorkspaceUsers(object):
             except NoResultFound:
                 raise NotFoundError("role")
 
-            new_workspace_role = WorkspaceRole(
-                user=user, role_id=role.id, workspace_id=workspace_id
-            )
-            user.workspace_roles.append(new_workspace_role)
+            try:
+                existing_workspace_role = WorkspaceRole.query.filter(
+                    WorkspaceRole.user == user,
+                    WorkspaceRole.workspace_id == workspace_id,
+                ).one()
+                new_workspace_role = existing_workspace_role
+                new_workspace_role.role = role
+            except NoResultFound:
+                new_workspace_role = WorkspaceRole(
+                    user=user, role_id=role.id, workspace_id=workspace_id
+                )
 
+            user.workspace_roles.append(new_workspace_role)
             workspace_user = WorkspaceUser(user, new_workspace_role)
             workspace_users.append(workspace_user)
 
