@@ -53,6 +53,7 @@ def create_user():
 
     Returns the created user.
     """
+
     try:
         new_user_dict = request.json
         user_id = new_user_dict["id"]
@@ -80,6 +81,7 @@ def update_user(user_id):
 
     Returns the updated user.
     """
+
     try:
         atat_role_name = request.json["atat_role"]
     except (KeyError, TypeError):
@@ -132,6 +134,7 @@ def get_workspace_user(workspace_id, user_id):
 
     Returns a workspace user.
     """
+
     try:
         workspace_user = WorkspaceUsers.get(workspace_id, user_id)
     except NotFoundError as e:
