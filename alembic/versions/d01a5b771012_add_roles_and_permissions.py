@@ -90,7 +90,6 @@ def upgrade():
 
                 Permissions.DEACTIVATE_WORKSPACE,
                 Permissions.VIEW_ATAT_PERMISSIONS,
-                Permissions.TRANSFER_OWNERSHIP_OF_WORKSPACE,
 
                 Permissions.ADD_APPLICATION_IN_WORKSPACE,
                 Permissions.DELETE_APPLICATION_IN_WORKSPACE,
