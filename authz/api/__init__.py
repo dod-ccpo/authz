@@ -9,7 +9,8 @@ from authz.serializers.workspace_user import WorkspaceUserSerializer
 from authz.database import db
 
 from authz.domain.exceptions import NotFoundError
-from authz.domain.workspace_users import WorkspaceUser
+from authz.domain.workspace_users import WorkspaceUsers
+from authz.domain.users import Users
 
 api = Blueprint("api", __name__)
 
@@ -80,27 +81,14 @@ def update_user(user_id):
 
     Returns the updated user.
     """
-    user_dict = request.json
+    atat_role_name = request.json["atat_role"]
 
     try:
-        user = User.query.filter_by(id=user_id).one()
-    except NoResultFound:
-        abort(Response({"error": "User {} not found.".format(user_id)}, 404))
+        updated_user = Users.update(user_id, atat_role_name)
+    except NotFoundError as e:
+        return (jsonify({"error": e.message}), 404)
 
-    try:
-        atat_role = Role.query.filter_by(name=user_dict["atat_role"]).one()
-    except NoResultFound:
-        abort(
-            Response(
-                {"error": "Role {} not found.".format(user_dict["atat_role"])}, 404
-            )
-        )
-
-    user.atat_role = atat_role
-    db.session.add(user)
-    db.session.commit()
-
-    return UserSerializer().jsonify(user)
+    return UserSerializer().jsonify(updated_user)
 
 
 @api.route("/workspaces/<uuid:workspace_id>/users", methods=["PUT"])
@@ -121,7 +109,7 @@ def update_workspace_users(workspace_id):
     workspace_users_to_update = request.json["users"]
 
     try:
-        workspace_users = WorkspaceUser.add_many(workspace_id, workspace_users_to_update)
+        workspace_users = WorkspaceUsers.add_many(workspace_id, workspace_users_to_update)
     except NotFoundError as e:
         return (jsonify({"error": e.message}), 404)
 
@@ -135,10 +123,10 @@ def get_workspace_user(workspace_id, user_id):
 
     GET /workspaces/<workspace id>/users/<user id>
 
-    Returns a user.
+    Returns a workspace user.
     """
     try:
-        workspace_user = WorkspaceUser.get(workspace_id, user_id)
+        workspace_user = WorkspaceUsers.get(workspace_id, user_id)
     except NotFoundError as e:
         return (jsonify({"error": e.message}), 404)
 
