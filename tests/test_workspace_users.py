@@ -23,10 +23,12 @@ def test_can_update_existing_workspace_user():
     workspace_id = uuid4()
     user = Users.create(uuid4(), "developer")
 
-    workspace_user_dicts = [
+    WorkspaceUsers.add_many(workspace_id, [
         {"id": user.id, "workspace_role": "owner"}
-    ]
+    ])
+    workspace_users = WorkspaceUsers.add_many(workspace_id, [
+        {"id": user.id, "workspace_role": "developer"}
+    ])
 
-    WorkspaceUsers.add_many(workspace_id, workspace_user_dicts)
-
-    workspace_users = WorkspaceUsers.add_many(workspace_id, workspace_user_dicts)
+    assert workspace_users[0].user.id == user.id
+    assert workspace_users[0].workspace_role.role.name == "developer"
