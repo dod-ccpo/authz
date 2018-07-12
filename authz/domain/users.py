@@ -9,7 +9,6 @@ from .exceptions import NotFoundError, AlreadyExistsError
 
 
 class Users(object):
-
     @classmethod
     def get(cls, user_id):
         try:
@@ -43,4 +42,3 @@ class Users(object):
         db.session.commit()
 
         return user
-

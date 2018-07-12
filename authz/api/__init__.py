@@ -65,6 +65,7 @@ def create_user():
 
     return UserSerializer().jsonify(new_user), 201
 
+
 @api.route("/users/<uuid:user_id>", methods=["PUT"])
 def update_user(user_id):
     """
@@ -105,7 +106,9 @@ def update_workspace_users(workspace_id):
     workspace_users_to_update = request.json["users"]
 
     try:
-        workspace_users = WorkspaceUsers.add_many(workspace_id, workspace_users_to_update)
+        workspace_users = WorkspaceUsers.add_many(
+            workspace_id, workspace_users_to_update
+        )
     except NotFoundError as e:
         return (jsonify({"error": e.message}), 404)
 

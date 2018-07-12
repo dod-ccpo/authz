@@ -1,5 +1,4 @@
 class NotFoundError(Exception):
-
     def __init__(self, resource_name):
         self.resource_name = resource_name
 

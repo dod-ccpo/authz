@@ -12,7 +12,9 @@ class WorkspaceUser(object):
 
     def permissions(self):
         atat_permissions = set(self.user.atat_role.permissions)
-        workspace_permissions = [] if self.workspace_role is None else self.workspace_role.role.permissions
+        workspace_permissions = (
+            [] if self.workspace_role is None else self.workspace_role.role.permissions
+        )
         return set(workspace_permissions).union(atat_permissions)
 
     def workspace_id(self):
@@ -20,7 +22,6 @@ class WorkspaceUser(object):
 
 
 class WorkspaceUsers(object):
-
     @classmethod
     def get(cls, workspace_id, user_id):
         try:
@@ -55,7 +56,9 @@ class WorkspaceUsers(object):
             except NoResultFound:
                 raise NotFoundError("role")
 
-            new_workspace_role = WorkspaceRole(user=user, role_id=role.id, workspace_id=workspace_id)
+            new_workspace_role = WorkspaceRole(
+                user=user, role_id=role.id, workspace_id=workspace_id
+            )
             user.workspace_roles.append(new_workspace_role)
 
             workspace_user = WorkspaceUser(user, new_workspace_role)

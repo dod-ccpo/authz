@@ -16,6 +16,7 @@ def make_app(config):
 
     # Imported at the end to avoid circular imports.
     from authz.api import api
+
     app.register_blueprint(api, url_prefix="/api/v1/")
 
     return app
