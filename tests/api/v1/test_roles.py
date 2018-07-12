@@ -98,4 +98,5 @@ def test_ccpo_has_workspace_permissions_by_default(client):
         "/api/v1/workspaces/{}/users/{}".format(workspace_id, user_id),
         content_type="application/json",
     )
+    from pprint import pprint
     assert "view_usage_report" in response.json["permissions"]

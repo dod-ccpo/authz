@@ -5,7 +5,11 @@ from sqlalchemy.exc import IntegrityError
 from authz.models import Role, User, WorkspaceRole
 from authz.serializers.role import RoleSerializer
 from authz.serializers.user import UserSerializer
+from authz.serializers.workspace_user import WorkspaceUserSerializer
 from authz.database import db
+
+from authz.domain.exceptions import NotFoundError
+from authz.domain.workspace_users import WorkspaceUser
 
 api = Blueprint("api", __name__)
 
@@ -156,20 +160,8 @@ def get_workspace_user(workspace_id, user_id):
     Returns a user.
     """
     try:
-        user = User.query.filter_by(id=user_id).one()
-    except NoResultFound:
-        abort(Response({"error": "User {} not found.".format(user_id)}, 404))
+        workspace_user = WorkspaceUser.get(workspace_id, user_id)
+    except NotFoundError as e:
+        return (jsonify({"error": e.message}), 404)
 
-    atat_permissions = set(user.atat_role.permissions)
-    try:
-        workspace_role = (
-            WorkspaceRole.query.join(User)
-            .filter(User.id == user_id, WorkspaceRole.workspace_id == workspace_id)
-            .one()
-        )
-        workspace_permissions = workspace_role.role.permissions
-    except NoResultFound:
-        workspace_permissions = []
-
-    user.permissions = set(workspace_permissions).union(atat_permissions)
-    return UserSerializer().jsonify(user)
+    return WorkspaceUserSerializer().jsonify(workspace_user)
