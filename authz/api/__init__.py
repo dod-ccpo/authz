@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, abort, request, Response
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import IntegrityError
 
 from authz.models import Role, User, WorkspaceRole
 from authz.serializers.role import RoleSerializer
@@ -8,7 +7,7 @@ from authz.serializers.user import UserSerializer
 from authz.serializers.workspace_user import WorkspaceUserSerializer
 from authz.database import db
 
-from authz.domain.exceptions import NotFoundError
+from authz.domain.exceptions import NotFoundError, AlreadyExistsError
 from authz.domain.workspace_users import WorkspaceUsers
 from authz.domain.users import Users
 
@@ -48,26 +47,14 @@ def create_user():
 
     Returns the created user.
     """
-    user_dict = request.json
+    new_user_dict = request.json
 
     try:
-        atat_role = Role.query.filter_by(name=user_dict["atat_role"]).one()
-    except NoResultFound:
-        abort(
-            Response(
-                {"error": "Role {} not found.".format(user_dict["atat_role"])}, 404
-            )
-        )
+        new_user = Users.create(new_user_dict["id"], new_user_dict["atat_role"])
+    except AlreadyExistsError:
+        return (jsonify({"error": "User already exists."}), 409)
 
-    try:
-        user = User(id=user_dict["id"], atat_role=atat_role)
-        db.session.add(user)
-        db.session.commit()
-    except IntegrityError:
-        abort(Response({"error": "User {} already exists.".format(user.id)}, 409))
-
-    return UserSerializer().jsonify(user), 201
-
+    return UserSerializer().jsonify(new_user), 201
 
 @api.route("/users/<uuid:user_id>", methods=["PUT"])
 def update_user(user_id):

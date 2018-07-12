@@ -6,3 +6,7 @@ class NotFoundError(Exception):
     @property
     def message(self):
         return "No {} could be found.".format(self.resource_name)
+
+
+class AlreadyExistsError(Exception):
+    pass
