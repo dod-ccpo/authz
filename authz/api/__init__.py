@@ -1,11 +1,8 @@
 from flask import Blueprint, jsonify, abort, request, Response
-from sqlalchemy.orm.exc import NoResultFound
 
-from authz.models import Role, User, WorkspaceRole
 from authz.serializers.role import RoleSerializer
 from authz.serializers.user import UserSerializer
 from authz.serializers.workspace_user import WorkspaceUserSerializer
-from authz.database import db
 
 from authz.domain.exceptions import NotFoundError, AlreadyExistsError
 from authz.domain.workspace_users import WorkspaceUsers
