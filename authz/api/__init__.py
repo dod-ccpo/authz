@@ -119,35 +119,13 @@ def update_workspace_users(workspace_id):
     """
 
     workspace_users_to_update = request.json["users"]
-    for user_dict in workspace_users_to_update:
-        try:
-            user = User.query.filter_by(id=user_dict["id"]).one()
-        except NoResultFound:
-            default_role = Role.query.filter_by(name="developer").one_or_none()
-            user = User(id=user_dict["id"], atat_role=default_role)
 
-        try:
-            role = Role.query.filter_by(name=user_dict["workspace_role"]).one()
-        except NoResultFound:
-            abort(
-                Response(
-                    {"error": "Role {} not found.".format(user_dict["workspace_role"])},
-                    404,
-                )
-            )
+    try:
+        workspace_users = WorkspaceUser.add_many(workspace_id, workspace_users_to_update)
+    except NotFoundError as e:
+        return (jsonify({"error": e.message}), 404)
 
-        user.workspace_roles.append(
-            WorkspaceRole(user=user, role_id=role.id, workspace_id=workspace_id)
-        )
-
-        db.session.add(user)
-
-    db.session.commit()
-
-    workspace_users = User.query.join(WorkspaceRole).filter(
-        WorkspaceRole.workspace_id == workspace_id
-    )
-    return UserSerializer().jsonify(workspace_users, many=True)
+    return WorkspaceUserSerializer().jsonify(workspace_users, many=True)
 
 
 @api.route("/workspaces/<uuid:workspace_id>/users/<uuid:user_id>", methods=["GET"])
