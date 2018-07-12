@@ -1,6 +1,5 @@
 from sqlalchemy.orm.exc import NoResultFound
 
-from authz.database import db
 from authz.models import Role
 from .exceptions import NotFoundError
 
@@ -15,3 +14,7 @@ class Roles(object):
             raise NotFoundError("role")
 
         return role
+
+    @classmethod
+    def get_all(cls):
+        return Role.query.all()

@@ -10,6 +10,7 @@ from authz.database import db
 from authz.domain.exceptions import NotFoundError, AlreadyExistsError
 from authz.domain.workspace_users import WorkspaceUsers
 from authz.domain.users import Users
+from authz.domain.roles import Roles
 
 api = Blueprint("api", __name__)
 
@@ -21,16 +22,24 @@ def get_roles():
 
     GET /roles
     """
-    roles = Role.query.all()
+
+    roles = Roles.get_all()
     return RoleSerializer().jsonify(roles, many=True)
 
 
 @api.route("/roles/<string:name>")
 def get_role(name):
+    """
+    Returns a given role.
+
+    GET /roles/<role name>
+    """
+
     try:
-        role = Role.query.filter_by(name=name).one()
-    except NoResultFound:
-        abort(404)
+        role = Roles.get(name)
+    except NotFoundError as e:
+        return (jsonify({"error": e.message}), 404)
+
     return RoleSerializer().jsonify(role)
 
 

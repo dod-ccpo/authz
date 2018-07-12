@@ -1,7 +1,3 @@
-from uuid import uuid4
-from json import dumps
-
-
 def test_get_roles(client):
     response = client.get('/api/v1/roles')
     assert response.status_code == 200
