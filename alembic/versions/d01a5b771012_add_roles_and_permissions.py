@@ -5,9 +5,15 @@ Revises: 1e7539dfa021
 Create Date: 2018-06-26 15:16:00.742957
 
 """
+import os
+import sys
+
 from alembic import op
-import sqlalchemy as sa
 from sqlalchemy.orm.session import Session
+
+# Add project root to python path so we can import models
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+sys.path.append(project_root)
 
 from authz.models.role import Role
 from authz.models.permissions import Permissions
@@ -44,8 +50,6 @@ def upgrade():
 
                 Permissions.VIEW_ASSIGNED_ATAT_ROLE_CONFIGURATIONS,
                 Permissions.VIEW_ASSIGNED_CSP_ROLE_CONFIGURATIONS,
-
-                Permissions.FEDERATE_INTO_CSP,
 
                 Permissions.DEACTIVATE_WORKSPACE,
                 Permissions.VIEW_ATAT_PERMISSIONS,
@@ -84,8 +88,6 @@ def upgrade():
                 Permissions.VIEW_ASSIGNED_ATAT_ROLE_CONFIGURATIONS,
                 Permissions.VIEW_ASSIGNED_CSP_ROLE_CONFIGURATIONS,
 
-                Permissions.FEDERATE_INTO_CSP,
-
                 Permissions.DEACTIVATE_WORKSPACE,
                 Permissions.VIEW_ATAT_PERMISSIONS,
                 Permissions.TRANSFER_OWNERSHIP_OF_WORKSPACE,
@@ -116,8 +118,6 @@ def upgrade():
                 Permissions.VIEW_ASSIGNED_ATAT_ROLE_CONFIGURATIONS,
                 Permissions.VIEW_ASSIGNED_CSP_ROLE_CONFIGURATIONS,
 
-                Permissions.FEDERATE_INTO_CSP,
-
                 Permissions.ADD_APPLICATION_IN_WORKSPACE,
                 Permissions.DELETE_APPLICATION_IN_WORKSPACE,
                 Permissions.DEACTIVATE_APPLICATION_IN_WORKSPACE,
@@ -137,7 +137,6 @@ def upgrade():
             permissions=[
                 Permissions.VIEW_USAGE_REPORT,
                 Permissions.VIEW_USAGE_DOLLARS,
-                Permissions.FEDERATE_INTO_CSP,
                 Permissions.VIEW_APPLICATION_IN_WORKSPACE,
                 Permissions.VIEW_ENVIRONMENT_IN_APPLICATION
             ]
@@ -148,8 +147,6 @@ def upgrade():
             permissions=[
                 Permissions.VIEW_USAGE_REPORT,
                 Permissions.VIEW_USAGE_DOLLARS,
-
-                Permissions.FEDERATE_INTO_CSP,
 
                 Permissions.VIEW_APPLICATION_IN_WORKSPACE,
 
@@ -162,8 +159,6 @@ def upgrade():
             permissions=[
                 Permissions.VIEW_ASSIGNED_ATAT_ROLE_CONFIGURATIONS,
                 Permissions.VIEW_ASSIGNED_CSP_ROLE_CONFIGURATIONS,
-
-                Permissions.FEDERATE_INTO_CSP,
 
                 Permissions.VIEW_ATAT_PERMISSIONS,
 

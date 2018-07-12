@@ -36,8 +36,3 @@ class Permissions(object):
 
     ADD_TAG_TO_WORKSPACE = 'add_tag_to_workspace'
     REMOVE_TAG_FROM_WORKSPACE = 'remove_tag_from_workspace'
-
-    # TODO: "not a permission itself"?
-    FEDERATE_INTO_CSP = 'federate_into_csp'
-
-    A_NEW_PERMISSION = 'a_new_permission'
