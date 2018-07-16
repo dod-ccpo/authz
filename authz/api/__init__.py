@@ -44,6 +44,22 @@ def get_role(name):
     return RoleSerializer().jsonify(role)
 
 
+@api.route("/users/<uuid:user_id>", methods=["GET"])
+def get_user(user_id):
+    """
+    Get a user.
+
+    GET /users/<user id>
+    """
+
+    try:
+        user = Users.get(user_id)
+    except NotFoundError as e:
+        return make_error_response(e, 404)
+
+    return UserSerializer().jsonify(user)
+
+
 @api.route("/users", methods=["POST"])
 def create_user():
     """
