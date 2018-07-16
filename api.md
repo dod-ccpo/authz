@@ -83,7 +83,7 @@ Creates a new atat user with the given role.
 #### Request
 
 ```
-POST /users/
+POST /api/v1/users/
 {
     id: <user id>,
     atat_role: <name of an atat role>
@@ -108,7 +108,7 @@ Update a given user with a new atat role.
 #### Request
 
 ```json
-PUT /users/<user id>
+PUT /api/v1/users/<user id>
 {
     atat_role: <name of an atat role>
 }
@@ -132,7 +132,7 @@ PUT /users/<user id>
 #### Request
 
 ```
-GET /workspaces/<workspace id>/users/<user id>
+GET /api/v1/workspaces/<workspace id>/users/<user id>
 ```
 
 #### Response
@@ -160,7 +160,7 @@ GET /workspaces/<workspace id>/users/<user id>
 #### Request
 
 ```json
-PUT /workspaces/<workspace id>/users
+PUT /api/v1/workspaces/<workspace id>/users
 {
   "users": [
     {"id": "78b274ab-62e7-4132-8a0c-8fb4d94e449b", "workspace_role": "developer"},
