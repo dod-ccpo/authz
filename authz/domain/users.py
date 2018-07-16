@@ -32,6 +32,20 @@ class Users(object):
         return user
 
     @classmethod
+    def get_or_create(cls, user_id, *args, **kwargs):
+        created = False
+
+        try:
+            user = Users.get(user_id)
+        except NotFoundError:
+            user = Users.create(user_id, *args, **kwargs)
+            db.session.add(user)
+            db.session.commit()
+            created = True
+
+        return user, created
+
+    @classmethod
     def update(cls, user_id, atat_role_name):
 
         user = Users.get(user_id)

@@ -76,6 +76,25 @@ GET /api/v1/role/developer
 
 ## Users
 
+### Retrieve a user
+
+#### Request
+
+```
+GET /api/v1/users/<user id>
+```
+
+#### Response
+
+```json
+{
+    "atat_role": "developer",
+    "id": "4069cdec-6750-44d4-97d7-126658019040",
+    "username": null,
+    "workspace_roles": []
+}
+```
+
 ### Create a new user
 
 Creates a new atat user with the given role.
@@ -92,7 +111,7 @@ POST /api/v1/users/
 
 #### Response
 
-```
+```json
 {
     "atat_role": "developer",
     "id": "4069cdec-6750-44d4-97d7-126658019040",
