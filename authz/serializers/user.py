@@ -9,3 +9,4 @@ class UserSerializer(marshmallow.ModelSchema):
 
     permissions = fields.List(fields.String)
     atat_role = fields.String(attribute="atat_role.name")
+    atat_permissions = fields.List(fields.String)
