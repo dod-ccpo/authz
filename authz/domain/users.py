@@ -27,7 +27,7 @@ class Users(object):
             db.session.add(user)
             db.session.commit()
         except IntegrityError:
-            raise AlreadyExistsError()
+            raise AlreadyExistsError("user")
 
         return user
 

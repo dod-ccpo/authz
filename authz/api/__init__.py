@@ -12,6 +12,10 @@ from authz.domain.roles import Roles
 api = Blueprint("api", __name__)
 
 
+def make_error_response(exception, status_code):
+    return (jsonify({"error": exception.message}), status_code)
+
+
 @api.route("/roles")
 def get_roles():
     """
@@ -35,7 +39,7 @@ def get_role(name):
     try:
         role = Roles.get(name)
     except NotFoundError as e:
-        return (jsonify({"error": e.message}), 404)
+        return make_error_response(e, 404)
 
     return RoleSerializer().jsonify(role)
 
@@ -63,8 +67,10 @@ def create_user():
 
     try:
         new_user = Users.create(user_id, user_atat_role)
-    except AlreadyExistsError:
-        return (jsonify({"error": "User already exists."}), 409)
+    except NotFoundError as e:
+        return make_error_response(e, 404)
+    except AlreadyExistsError as e:
+        return make_error_response(e, 409)
 
     return UserSerializer().jsonify(new_user), 201
 
@@ -90,7 +96,7 @@ def update_user(user_id):
     try:
         updated_user = Users.update(user_id, atat_role_name)
     except NotFoundError as e:
-        return (jsonify({"error": e.message}), 404)
+        return make_error_response(e, 404)
 
     return UserSerializer().jsonify(updated_user)
 
@@ -120,7 +126,7 @@ def update_workspace_users(workspace_id):
             workspace_id, workspace_users_to_update
         )
     except NotFoundError as e:
-        return (jsonify({"error": e.message}), 404)
+        return make_error_response(e, 404)
 
     return WorkspaceUserSerializer().jsonify(workspace_users, many=True)
 
@@ -138,6 +144,6 @@ def get_workspace_user(workspace_id, user_id):
     try:
         workspace_user = WorkspaceUsers.get(workspace_id, user_id)
     except NotFoundError as e:
-        return (jsonify({"error": e.message}), 404)
+        return make_error_response(e, 404)
 
     return WorkspaceUserSerializer().jsonify(workspace_user)
