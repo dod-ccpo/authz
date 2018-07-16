@@ -11,6 +11,7 @@ alembic = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 uuid = "*"
+factory-boy = "*"
 
 [dev-packages]
 ipython = "*"

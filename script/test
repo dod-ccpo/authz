@@ -9,6 +9,6 @@ cd "$(dirname "${0}")/.."
 if [ "$1" = "watch" ]; then
   ag -l -G [py]$ | entr pipenv run python -m pytest
 else
-  pipenv run pylint .
+  pipenv run pylint authz tests app.py
   pipenv run python -m pytest -s
 fi

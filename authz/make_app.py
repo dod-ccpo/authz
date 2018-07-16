@@ -16,20 +16,18 @@ def make_app(config):
 
     # Imported at the end to avoid circular imports.
     from authz.api import api
+
     app.register_blueprint(api, url_prefix="/api/v1/")
 
     return app
 
 
 def make_config():
-    BASE_CONFIG_FILENAME = os.path.join(
-        os.path.dirname(__file__),
-        '../config/base.ini',
-    )
+    BASE_CONFIG_FILENAME = os.path.join(os.path.dirname(__file__), "../config/base.ini")
     ENV_CONFIG_FILENAME = os.path.join(
         os.path.dirname(__file__),
-        '../config/',
-        '{}.ini'.format(os.getenv('FLASK_ENV', 'dev').lower())
+        "../config/",
+        "{}.ini".format(os.getenv("FLASK_ENV", "dev").lower()),
     )
     config = ConfigParser()
 
