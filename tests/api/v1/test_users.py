@@ -26,7 +26,7 @@ def test_create_existing_user(client):
         content_type="application/json",
         data=dumps({"id": user_id, "atat_role": "ccpo"}),
     )
-    assert response.status_code == 409
+    assert response.status_code == 200
 
 
 def test_update_user(client):
