@@ -42,7 +42,7 @@ def make_config():
     config.read(config_files)
 
     # Assemble DATABASE_URI value
-    database_url = ('postgres://'
+    database_uri = ('postgres://'
                    + config.get('default', 'DATABASE_USERNAME')
                    + ':'
                    + config.get('default', 'DATABASE_PASSWORD')
