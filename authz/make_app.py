@@ -40,4 +40,18 @@ def make_config():
     # ENV_CONFIG will override values in BASE_CONFIG
     # OVERRIDE_CONFIG will override values in ENV_CONFIG or BASE_CONFIG
     config.read(config_files)
+
+    # Assemble DATABASE_URI value
+    database_url = ('postgres://'
+                   + config.get('default', 'DATABASE_USERNAME')
+                   + ':'
+                   + config.get('default', 'DATABASE_PASSWORD')
+                   + '@'
+                   + config.get('default', 'DATABASE_HOST')
+                   + ':'
+                   + config.get('default', 'DATABASE_PORT')
+                   + '/'
+                   + config.get('default', 'DATABASE_NAME'))
+    config.set('default', 'DATABASE_URI', database_uri)
+
     return map_config(config)
