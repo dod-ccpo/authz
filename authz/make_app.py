@@ -29,8 +29,15 @@ def make_config():
         "../config/",
         "{}.ini".format(os.getenv("FLASK_ENV", "dev").lower()),
     )
+    OVERRIDE_CONFIG_FILENAME = os.getenv("OVERRIDE_CONFIG_FULLPATH")
+
     config = ConfigParser()
 
-    # ENV_CONFIG will override values in BASE_CONFIG.
-    config.read([BASE_CONFIG_FILENAME, ENV_CONFIG_FILENAME])
+    config_files = [BASE_CONFIG_FILENAME, ENV_CONFIG_FILENAME]
+    if OVERRIDE_CONFIG_FILENAME:
+        config_files.append(OVERRIDE_CONFIG_FILENAME)
+
+    # ENV_CONFIG will override values in BASE_CONFIG
+    # OVERRIDE_CONFIG will override values in ENV_CONFIG or BASE_CONFIG
+    config.read(config_files)
     return map_config(config)
