@@ -76,6 +76,31 @@ GET /api/v1/role/developer
 
 ## Users
 
+### Retrieve a user
+
+#### Request
+
+```
+GET /api/v1/users/<user id>
+```
+
+#### Response
+
+```json
+{
+    "atat_permissions": [
+        "view_usage_report",
+        "view_usage_dollars",
+        "view_application_in_workspace",
+        "view_environment_in_application"
+    ],
+    "atat_role": "developer",
+    "id": "164497f6-c1ea-4f42-a5ef-101da278c012",
+    "username": null,
+    "workspace_roles": []
+}
+```
+
 ### Create a new user
 
 Creates a new atat user with the given role.
@@ -92,14 +117,22 @@ POST /api/v1/users/
 
 #### Response
 
-```
+```json
 {
+    "atat_permissions": [
+        "view_usage_report",
+        "view_usage_dollars",
+        "view_application_in_workspace",
+        "view_environment_in_application"
+    ],
     "atat_role": "developer",
-    "id": "4069cdec-6750-44d4-97d7-126658019040",
+    "id": "164497f6-c1ea-4f42-a5ef-101da278c012",
     "username": null,
     "workspace_roles": []
 }
 ```
+
+Returns a 201 if a new user was created, and a 200 if the user already exists.
 
 ### Update a user
 
@@ -118,8 +151,14 @@ PUT /api/v1/users/<user id>
 
 ```json
 {
+    "atat_permissions": [
+        "view_usage_report",
+        "view_usage_dollars",
+        "view_application_in_workspace",
+        "view_environment_in_application"
+    ],
     "atat_role": "developer",
-    "id": "4069cdec-6750-44d4-97d7-126658019040",
+    "id": "164497f6-c1ea-4f42-a5ef-101da278c012",
     "username": null,
     "workspace_roles": []
 }

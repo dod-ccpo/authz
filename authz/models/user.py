@@ -14,3 +14,7 @@ class User(db.Model):
 
     atat_role = relationship("Role")
     workspace_roles = relationship("WorkspaceRole", backref="user")
+
+    @property
+    def atat_permissions(self):
+        return self.atat_role.permissions

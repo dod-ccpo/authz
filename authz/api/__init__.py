@@ -44,6 +44,22 @@ def get_role(name):
     return RoleSerializer().jsonify(role)
 
 
+@api.route("/users/<uuid:user_id>", methods=["GET"])
+def get_user(user_id):
+    """
+    Get a user.
+
+    GET /users/<user id>
+    """
+
+    try:
+        user = Users.get(user_id)
+    except NotFoundError as e:
+        return make_error_response(e, 404)
+
+    return UserSerializer().jsonify(user)
+
+
 @api.route("/users", methods=["POST"])
 def create_user():
     """
@@ -66,13 +82,13 @@ def create_user():
         abort(400)
 
     try:
-        new_user = Users.create(user_id, user_atat_role)
+        user, created = Users.get_or_create(user_id, user_atat_role)
     except NotFoundError as e:
         return make_error_response(e, 404)
-    except AlreadyExistsError as e:
-        return make_error_response(e, 409)
 
-    return UserSerializer().jsonify(new_user), 201
+    status_code = 201 if created else 200
+
+    return UserSerializer().jsonify(user), status_code
 
 
 @api.route("/users/<uuid:user_id>", methods=["PUT"])
