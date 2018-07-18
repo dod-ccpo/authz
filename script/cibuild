@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# If a command fails, exit the script
-set -e
+# script/cibuild: Run CI related checks and tests
 
-# Ensure we are in the app root directory (not the /script directory)
-cd "$(dirname "${0}")/.."
+source "$(dirname "${0}")"/../script/include/global_header.inc.sh
 
-psql -c 'create database authz;' -U postgres
-pipenv run alembic upgrade head
-
+# Run lint/style checks and unit tests
+source ./script/test
