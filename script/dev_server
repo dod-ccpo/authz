@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# script/bootstrap: Install all the dependencies that the application requires to
+#                   run.
+
+source "$(dirname "${0}")"/../script/include/global_header.inc.sh
+
+# Make sure we default to the 'development' environment
+if [ -z "${FLASK_ENV+is_set}" ]; then
+  FLASK_ENV="development"
+fi
+
+# Run the shared dev_server script
+source ./script/include/run_dev_server "$*"

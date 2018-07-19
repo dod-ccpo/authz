@@ -39,19 +39,19 @@ To start the app and watch for changes:
 
     script/server
 
+To start the server in the background:
+
+    script/dev_server
+
 ## Testing
 
-To run unit tests:
+To run lint, security analysis, and unit tests:
 
     script/test
 
-or
+To run just unit tests:
 
-    python -m pytest
-
-To run the unit tests and watch for changes to python files:
-
-    script/test watch
+    pipenv run python -m pytest
 
 ## Direnv
 
